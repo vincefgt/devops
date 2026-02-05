@@ -119,8 +119,8 @@ jobs:
       # Charger le schéma et les données
       - name: Load database schema and data
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/schema.sql
-          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/data.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < **/schema.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < **/data.sql
           echo "✅ Database loaded!"
 
       - run: echo "job's status is ${{job.status}}."
