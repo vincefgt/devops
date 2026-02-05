@@ -108,13 +108,13 @@ jobs:
             ${{ runner.os }}-mysql-
 
       # Attendre que MySQL soit prêt
-      - name: Wait for MySQL
-        run: |
-          until mysqladmin ping -h"127.0.0.1" -P"3306" --silent; do
-            echo "Waiting for MySQL..."
-            sleep 2
-          done
-          echo "✅ MySQL is ready!"
+      #- name: Wait for MySQL
+       # run: |
+        #  until mysqladmin ping -h"127.0.0.1" -P"3306" --silent; do
+         #   echo "Waiting for MySQL..."
+          #  sleep 2
+          #done
+          #echo "✅ MySQL is ready!"
 
       # Charger le schéma et les données
       - name: Load database schema and data
