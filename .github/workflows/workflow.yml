@@ -124,6 +124,56 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/schema.sql
           mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/data.sql
-          echo "✅ D
+          echo "✅ D  # Cache MySQL data
+      - name: Cache MySQL data
+        uses: actions/cache@v4
+        with:
+          path: |
+            /var/lib/mysql
+            ~/.mysql
+          key: ${{ runner.os }}-mysql-${{ hashFiles('**/schema.sql', '**/data.sql') }}
+          restore-keys: |
+            ${{ runner.os }}-mysql-
+
+      # Attendre que MySQL soit prêt
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h"127.0.0.1" -P"3306" --silent; do
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+          echo "✅ MySQL is ready!"
+
+      # Charger le schéma et les données
+      - name: Load database schema and data
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/schema.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/data.sql
+          echo "✅ D  # Cache MySQL data
+      - name: Cache MySQL data
+        uses: actions/cache@v4
+        with:
+          path: |
+            /var/lib/mysql
+            ~/.mysql
+          key: ${{ runner.os }}-mysql-${{ hashFiles('**/schema.sql', '**/data.sql') }}
+          restore-keys: |
+            ${{ runner.os }}-mysql-
+
+      # Attendre que MySQL soit prêt
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h"127.0.0.1" -P"3306" --silent; do
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+          echo "✅ MySQL is ready!"
+
+      # Charger le schéma et les données
+      - name: Load database schema and data
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/schema.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < src/main/resources/data.sql
+          echo "✅ Database loaded!"
 
       - run: echo "job's status is ${{job.status}}."
