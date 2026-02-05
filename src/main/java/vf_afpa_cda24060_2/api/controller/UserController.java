@@ -1,7 +1,6 @@
 package vf_afpa_cda24060_2.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vf_afpa_cda24060_2.api.model.User;
 import vf_afpa_cda24060_2.api.service.UserService;
@@ -29,4 +28,31 @@ public class UserController {
         Optional<User> user = Optional.ofNullable(userService.getUser(id));
         return user.orElse(null);
     }
-}
+
+    @DeleteMapping("/user/{id}")
+    public void deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
+    }
+
+    @PutMapping("/user/{id}")
+        public User updateuser (@PathVariable("id") Integer id, @RequestBody User user) {
+            Optional<User> userOptional = Optional.ofNullable(userService.getUser(id));
+            if (userOptional.isPresent()) {
+                User userToUpdate = userOptional.get();
+
+                String firstName = user.getFirstname();
+                if (firstName != null) {
+                    userToUpdate.setFirstname(firstName);
+                }
+                String lastName = user.getLastname();
+                if (lastName != null) {
+                    userToUpdate.setLastname(lastName);
+                }
+                userService.saveUser(userToUpdate);
+                return userToUpdate;
+            } else {
+                return null;
+            }
+        }
+
+    }
