@@ -109,7 +109,7 @@ jobs:
       # Charger le schéma et les données
       - name: Import database dump
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot bed_pizzas < database_dump.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot bed_pizza < database_dump.sql
           echo "✅ Database loaded!"
 
       - run: echo "job's status is ${{job.status}}."
