@@ -97,30 +97,19 @@ jobs:
           # If true, hidden files will be included in the artifact. If false, hidden files will be excluded from the artifact.
           include-hidden-files: false # optional, default is false
 
-      - name: Cache MySQL data
-        uses: actions/cache@v4
-        with:
-          path: |
-            /var/lib/mysql
-            ~/.mysql
-          key: ${{ runner.os }}-mysql-${{ hashFiles('**/schema.sql', '**/data.sql') }}
-          restore-keys: |
-            ${{ runner.os }}-mysql-
-
-      # Attendre que MySQL soit prêt
-      #- name: Wait for MySQL
-       # run: |
-        #  until mysqladmin ping -h"127.0.0.1" -P"3306" --silent; do
-         #   echo "Waiting for MySQL..."
-          #  sleep 2
-          #done
-          #echo "✅ MySQL is ready!"
+       # Attendre que MySQL soit prêt
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h"127.0.0.1" -P"3306" --silent; do
+            echo "Waiting for MySQL..."
+            sleep 1
+          done
+          echo "✅ MySQL is ready!"
 
       # Charger le schéma et les données
-      - name: Load database schema and data
+      - name: Import database dump
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < **/schema.sql
-          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < **/data.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot test_db < database_dump.sql
           echo "✅ Database loaded!"
 
       - run: echo "job's status is ${{job.status}}."
