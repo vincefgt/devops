@@ -10,8 +10,6 @@ on:
       - main
     types: [opened, synchronize, reopened]
 
-
-
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
