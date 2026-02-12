@@ -59,7 +59,7 @@ jobs:
       # Charger le schéma et les données
       - name: Import database dump
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u${{ secrets.DB_NAME }} -p${{ secrets.DB_PASSWORD }} bed_pizza < infra/mysql.sql
+          mysql -h 127.0.0.1 -P 3306 -u${{ secrets.DB_NAME }} -p${{ secrets.DB_PASSWORD }} bed_pizza < infra/database.sql
           echo "✅ Database loaded!"
 
       - name: Set up JDK21
@@ -98,9 +98,9 @@ jobs:
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{secrets.PERSONAL_TOKEN_ALLURE}}
+          github_token: ${{secrets.GITHUB_TOKEN}}
           publish_dir: target/site/allure-maven-plugin
-          destination_dir: allure-report
+          destination_dir: "./allure-report"
           keep_files: false
 
       - name: Upload a Build Artifact
