@@ -59,7 +59,7 @@ jobs:
       # Charger le schéma et les données
       - name: Import database dump
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u${{ secrets.DB_NAME }} -p${{ secrets.DB_PASSWORD }} bed_pizza < infra/database.sql
+          mysql -h 127.0.0.1 -P 3306 -u${{ secrets.DB_NAME }} -p${{ secrets.DB_PASSWORD }} Bed_Pizza < infra/database.sql
           echo "✅ Database loaded!"
 
       - name: Set up JDK21
