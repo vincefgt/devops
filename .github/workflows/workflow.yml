@@ -119,7 +119,7 @@ jobs:
           # For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.
           overwrite: false # optional, default is false
           # If true, hidden files will be included in the artifact. If false, hidden files will be excluded from the artifact.
-          include-hidden-files: false # optional, default is false
+          include-hidden-files: false # optional, default is false.
 
       - run: echo "job's status is ${{job.status}}."
 
