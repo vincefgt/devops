@@ -59,7 +59,7 @@ jobs:
       # Charger le schéma et les données
       - name: Import database dump
         run: |
-          mysqldump -h 127.0.0.1 -P 3306 -u${{ secrets.DB_NAME }} -p${{ secrets.DB_PASSWORD }} bed_pizza > database_dump.sql
+          mysql -h 127.0.0.1 -P 3306 -u${{ secrets.DB_NAME }} -p${{ secrets.DB_PASSWORD }} bed_pizza < infra/mysql.sql
           echo "✅ Database loaded!"
 
       - name: Set up JDK21
@@ -90,8 +90,18 @@ jobs:
 
       - name: Build and analyze
         env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=vincefgt_devops
+
+      - name: Deploy_Allure_Report_to_Github_Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{secrets.PERSONAL_TOKEN_ALLURE}}
+          publish_dir: target/site/allure-maven-plugin
+          destination_dir: allure-report
+          keep_files: false
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
@@ -110,3 +120,4 @@ jobs:
           include-hidden-files: false # optional, default is false
 
       - run: echo "job's status is ${{job.status}}."
+
